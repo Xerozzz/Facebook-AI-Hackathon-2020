@@ -5,7 +5,23 @@
  * 
  */
 
-const wit = {
+require('dotenv').config();
 
+// Import axios to use to make promised based request
+const axios = require('axios');
+axios.defaults.headers.common['Authorization'] = `Bearer ${process.env.WIT_TOKEN}`;
+
+const wit = {
+    predict(sen){
+        const url = 'https://api.wit.ai/message?v=20200609&q=';
+        return axios
+        .get(`${url}${sen}`)
+        .then(
+            function(res){
+                return res.data;
+            }
+        );
+    }
 };
 
+modules.export = wit;
