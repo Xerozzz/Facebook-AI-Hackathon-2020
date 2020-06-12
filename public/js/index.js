@@ -22,14 +22,16 @@
 			//BIND CLICK EVENTS TO ELEMENTS
 			for (i = 0; i < this.tasklistChildren.length; i += 1) {
 				//ADD CLICK EVENT TO CHECKBOXES
-				chkBox = this.tasklistChildren[i].getElementsByTagName("input")[0];
+				// chkBox = this.tasklistChildren[i].getElementsByTagName("input")[0];
+				chkBox = $("#tasker input")
 				chkBox.onclick = this.completeTask.bind(
 					this,
 					this.tasklistChildren[i],
 					chkBox
 				);
 				//ADD CLICK EVENT TO DELETE BUTTON
-				delBtn = this.tasklistChildren[i].getElementsByTagName("button")[0];
+				// delBtn = this.tasklistChildren[i].getElementsByTagName("button")[0];
+				delBtn = $("#tasker button")
 				delBtn.onclick = this.delTask.bind(this, i);
 			}
 		},
