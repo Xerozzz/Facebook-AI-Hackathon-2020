@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Ai Can Do</title>
+
+  <!-- CSS  -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href="css/materialize-social.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+  <nav class="white" role="navigation">
+    <div class="nav-wrapper container">
+      <a id="logo-container" href="index.html" class="brand-logo">Ai Can Do</a>
+      <ul class="right hide-on-med-and-down">
+        <!-- signed out nav buttons -->
+        <li><a href="#modal-login" class="modal-trigger signed-out">Login</a></li>
+        <li><a href="#modal-signup" class="modal-trigger signed-out">Signup</a></li>
+
+        <!-- signed in nav buttons -->
+        <li><a href="tasks.html" class="modal-trigger signed-in">Tasks</a></li>
+        <li><a href="#" class="modal-trigger signed-in">Calendar</a></li>
+        <li><a class="red-text text-darken-1 signed-in" onclick="logOut()">Logout</a></li>
+        <li><a class="blue-text text-darken-1 signed-in" id="user-text"></a></li>
+
+      <ul id="nav-mobile" class="sidenav">
+        <!-- signed out nav buttons -->
+        <li><a href="#modal-login" class="modal-trigger signed-out">Login</a></li>
+        <li><a href="#modal-signup" class="modal-trigger signed-out">Signup</a></li>
+
+        <!-- signed in nav buttons -->
+        <li><a href="tasks.html" class="modal-trigger signed-out">Tasks</a></li>
+        <li><a href="#" class="modal-trigger signed-out">Calendar</a></li>
+        <li><a class="blue-text text-darken-1 signed-in" id="UserText"></a></li>
+      </ul>
+      <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+    </div>
+  </nav>
+
+  <!-- Modal Structure -->
+  <div id="modal-login" class="modal">
+    <form method="post" onsubmit="signInWithEmail()">
+      <div class="modal-content">
+        <h4>Login</h4>
+
+
+        <div id="signin-error-msg"></div>
+        <div class="row">
+          <div class="input-field col s12">
+            <input type="email" class="validate" id="email-login">
+            <label for="email-login">Email</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s12">
+            <input type="password" class="validate" id="pwd-login">
+            <label for="pwd-login">Password</label>
+          </div>
+        </div>
+        <button type="button" class="waves-effect waves-light btn-large social google" onclick="signInWithGoogle()">
+          <i class="fa fa-google"></i> Sign in with Google</button>
+      </div>
+      <div class="modal-footer">
+        <a href="#" class="modal-close waves-effect waves-light btn red lighten-1">Cancel</a>
+        <button class="waves-effect waves-light btn teal lighten-1" type="submit">Login</button>
+      </div>
+    </form>
+      
+    
+  </div>
+
+  <!-- Modal Structure -->
+  <div id="modal-signup" class="modal">
+    <form method="post" onsubmit="signUpWithEmail()">
+      <div class="modal-content">
+        <h4>Sign Up</h4>
+        <div id="signup-error-msg"></div>
+        <div class="row">
+          <div class="input-field col s12">
+            <input id="uid" type="text" class="validate">
+            <label for="uid">Username</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s12">
+            <input id="email" type="email" class="validate">
+            <label for="email">Email</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s12">
+            <input id="pwd1" type="password" class="validate">
+            <label for="pwd1">Password</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s12">
+            <input id="pwd2" type="password" class="validate">
+            <label for="pwd2">Re-Enter Password</label>
+          </div>
+        </div>
+        <button type="button" class="waves-effect waves-light btn-large social google" onclick="signInWithGoogle()">
+          <i class="fa fa-google"></i> Sign in with Google</button>
+      </div>
+      <div class="modal-footer">
+        <a href="#" class="modal-close waves-effect waves-light btn red lighten-1">Cancel</a>
+        <button type="submit" class="waves-effect waves-light btn teal lighten-1">Sign Up</button>
+      </div>
+    </form>
+      
+
+    
+  </div>
+
+  <div id="index-banner" class="parallax-container" style="height: 50vh;">
+    <div class="section no-pad-bot">
+      <div class="container">
+        <div style="height: 6vh;"></div>
+        <h1 class="header center teal-text text-lighten-3">AI Can Do</h1>
+        <div class="row center">
+          <h5 class="header col s12 red-text text-lighten-3">An AI that can do many things...like homework management!</h5>
+        </div>
+        <div class="row center">
+          <a href="#" class="btn-large waves-effect waves-light teal lighten-1">Get Started</a>
+        </div>
+        <br><br>
+
+      </div>
+    </div>
+    <div class="parallax"><img src="images/bg3.jpg" alt=""></div>
+  </div>
+
+
+  <div class="container">
+    <div class="section">
+
+      <!--   Icon Section   -->
+      <div class="row">
+        <div class="col s12 m4">
+          <div class="icon-block">
+            <h2 class="center brown-text"><i class="material-icons">chat</i></h2>
+            <h5 class="center">I can talk</h5>
+
+            <p class="light">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+          </div>
+        </div>
+
+        <div class="col s12 m4">
+          <div class="icon-block">
+            <h2 class="center brown-text"><i class="material-icons">group</i></h2>
+            <h5 class="center">I can do</h5>
+
+            <p class="light">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+          </div>
+        </div>
+
+        <div class="col s12 m4">
+          <div class="icon-block">
+            <h2 class="center brown-text"><i class="material-icons">settings</i></h2>
+            <h5 class="center">Simple AF</h5>
+
+            <p class="light">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <footer class="page-footer teal">
+    <div class="container">
+      <div class="row">
+        <div class="col l6 s12">
+          <h5 class="white-text">Facebook AI Hackathon</h5>
+          <p class="grey-text text-lighten-4">Simple AI text-to-speech to-do-list using the Wit.AI framework</p>
+
+
+        </div>
+        <div class="col l3 s12">
+          <h5 class="white-text">Members</h5>
+          <ul>
+            <li>Loh Kar Wei</li>
+            <li>Chuan Hao</li>
+            <li>Lee Yi Terng</li>
+            <li>Ryan</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-copyright">
+      <div class="container">
+      Made by <a class="brown-text text-lighten-3" href="http://materializecss.com">Materialize</a>
+      </div>
+    </div>
+  </footer>
+
+
+  <!--  Scripts-->
+  <!-- jQuery library -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="js/materialize.js"></script>
+  <script src="js/init.js"></script>
+
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-auth.js"></script>
+
+	<!-- TODO: Add SDKs for Firebase products that you want to use
+	     https://firebase.google.com/docs/web/setup#available-libraries -->
+  <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-analytics.js"></script>
+  <script src="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.js"></script>
+  <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.css" />
+
+	<script>
+	  // Your web app's Firebase configuration
+	  var firebaseConfig = {
+	    apiKey: "AIzaSyA8DMR5BpnxWl4BrO1mIucPMwc1kkr0njQ",
+	    authDomain: "ai-can-do.firebaseapp.com",
+	    databaseURL: "https://ai-can-do.firebaseio.com",
+	    projectId: "ai-can-do",
+	    storageBucket: "ai-can-do.appspot.com",
+	    messagingSenderId: "434542987185",
+	    appId: "1:434542987185:web:10ec9ba253fc203215df90",
+	    measurementId: "G-R3MD3J1H87"
+	  };
+	  // Initialize Firebase
+	  firebase.initializeApp(firebaseConfig);
+
+	  $(document).ready(function () {
+        $('.modal').modal();
+    });
+  </script>
+  
+  <script src="js/login.js"></script>
+
+  </body>
+</html>

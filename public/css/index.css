@@ -1,5 +1,18 @@
 @charset "UTF-8";
 
+
+.red{border: 2px red solid}
+
+
+
+
+
+
+
+
+
+
+
 .tasker ul, .tasker li,
 .tasker .error,
 .tasker button,
@@ -16,10 +29,10 @@
   -webkit-transition: all 0.2s ease;
 }
 
-body {
+/* body {
   background: #f1f1f1;
   margin-top: 2rem;
-}
+} */
 
 
 .tasker {
@@ -103,6 +116,6 @@ body {
   color: #ed1c24;
 }
 
-.fa fa-fw fa-plus{
+#tasker .fa fa-fw fa-plus{
 	size: 200%
 }
