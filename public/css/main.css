@@ -1,0 +1,58 @@
+body{
+	background-color: #1d232f;
+}
+h1{
+	padding: 0;
+	margin: 0;
+}
+.body-container{
+	padding: 5%;
+	color: #fff;
+}
+.body-text{color: #fff;}
+.spacer{height: 20vh;}
+
+.red{border: 1px solid red;}
+
+.img-div{width: 75vw;}
+.img-div > img{
+	width: 100%;
+	height: auto;
+}
+.container-fluid{
+	color: #fff;
+}
+/*.content-body{
+	background: url("../images/recreators.jpg") no-repeat;
+	background-size: cover;
+}*/
+.pagination{
+	justify-content: center;
+}
+
+
+
+
+
+.main-banner{
+	border-radius: 0px;
+	min-height: 80vh;
+	/*background-image: url("../images/ririka2.jpg");*/
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center;
+	background-attachment: fixed;
+	position: relative;
+}
+
+#jumbotron-text{
+	color: #fff;
+	position: absolute;
+	right: 5vw;
+	bottom: 5vh;
+	font-size: 1.5em;
+}
+
+.dark-card{background-color: rgba(255, 255, 255, 0.1);}
+.dark-card > .card-title{color: #fff;}
+.dark-card p{color: #969ca1;}

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>To-Do List</title>
+
+  <!-- CSS  -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href="css/materialize-social.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+    <nav class="white" role="navigation">
+        <div class="nav-wrapper container">
+            <a id="logo-container" href="index.html" class="brand-logo">Ai Can Do</a>
+            <ul class="right hide-on-med-and-down">
+            <!-- signed out nav buttons -->
+            <li><a href="#modal-login" class="modal-trigger signed-out">Login</a></li>
+            <li><a href="#modal-signup" class="modal-trigger signed-out">Signup</a></li>
+
+            <!-- signed in nav buttons -->
+            <li><a href="tasks.html" class="signed-in">Tasks</a></li>
+            <li><a class="red-text text-darken-1 signed-in" onclick="logOut()">Logout</a></li>
+            <li><a class="blue-text text-darken-1 signed-in" id="user-text"></a></li>
+
+            <ul id="nav-mobile" class="sidenav">
+            <!-- signed out nav buttons -->
+            <li><a href="#modal-login" class="modal-trigger signed-out">Login</a></li>
+            <li><a href="#modal-signup" class="modal-trigger signed-out">Signup</a></li>
+
+            <!-- signed in nav buttons -->
+            <li><a href="tasks.html" class="signed-out">Tasks</a></li>
+            <li><a class="blue-text text-darken-1 signed-in" id="UserText"></a></li>
+            </ul>
+            <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+        </div>
+    </nav>
+
+    <!-- Modal Structure -->
+    <div id="modal-login" class="modal">
+    <form method="post" onsubmit="signInWithEmail()">
+        <div class="modal-content">
+        <h4>Login</h4>
+
+
+        <div id="signin-error-msg"></div>
+        <div class="row">
+            <div class="input-field col s12">
+            <input type="email" class="validate" id="email-login">
+            <label for="email-login">Email</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s12">
+            <input type="password" class="validate" id="pwd-login">
+            <label for="pwd-login">Password</label>
+            </div>
+        </div>
+        <button type="button" class="waves-effect waves-light btn-large social google" onclick="signInWithGoogle()">
+            <i class="fa fa-google"></i> Sign in with Google</button>
+        </div>
+        <div class="modal-footer">
+        <a href="#" class="modal-close waves-effect waves-light btn red lighten-1">Cancel</a>
+        <button class="waves-effect waves-light btn teal lighten-1" type="submit">Login</button>
+        </div>
+    </form>
+        
+    
+    </div>
+
+    <!-- Modal Structure -->
+    <div id="modal-signup" class="modal">
+    <form method="post" onsubmit="signUpWithEmail()">
+        <div class="modal-content">
+        <h4>Sign Up</h4>
+        <div id="signup-error-msg"></div>
+        <div class="row">
+            <div class="input-field col s12">
+            <input id="uid" type="text" class="validate">
+            <label for="uid">Username</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s12">
+            <input id="email" type="email" class="validate">
+            <label for="email">Email</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s12">
+            <input id="pwd1" type="password" class="validate">
+            <label for="pwd1">Password</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s12">
+            <input id="pwd2" type="password" class="validate">
+            <label for="pwd2">Re-Enter Password</label>
+            </div>
+        </div>
+        <button type="button" class="waves-effect waves-light btn-large social google" onclick="signInWithGoogle()">
+            <i class="fa fa-google"></i> Sign in with Google</button>
+        </div>
+        <div class="modal-footer">
+        <a href="#" class="modal-close waves-effect waves-light btn red lighten-1">Cancel</a>
+        <button type="submit" class="waves-effect waves-light btn teal lighten-1">Sign Up</button>
+        </div>
+    </form>
+        
+
+    
+    </div>
+
+  <div style="height: 10vh;"></div>
+
+    <div class="row">
+        
+        <div class="input-field col s6 offset-l3">
+            <form method="post" onsubmit="addNewTask(this)">
+                <i class="material-icons prefix">textsms</i>
+                <input type="text" id="task-input" class="autocomplete">
+                <label for="task-input">Give me a task!</label>
+                <input type="submit" style="visibility: hidden;">
+                
+            </form>
+            <a id="start-record" onclick="startRecording()" class="waves-effect waves-light btn"><i class="material-icons">mic</i></a>
+            <a id="stop-record" onclick="stopRecording()" class="waves-effect waves-light btn disabled"><i class="material-icons">stop</i></a>
+        </div>
+       
+        
+    </div>
+
+    <div class="row">
+        <div class="col s6 offset-l3">
+            <ul class="collection with-header" id="tasks">
+                <li class="collection-header"><h4>My Tasks</h4></li>
+                <li class="collection-item">
+                    <div class="progress">
+                        <div class="indeterminate"></div>
+                    </div>
+                </li>
+              </ul>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col s6 offset-l3">
+            <ul class="collection with-header" id="completed-tasks">
+                <li class="collection-header"><h4>Completed Tasks</h4></li>
+                <li class="collection-item">
+                    <div class="progress">
+                        <div class="indeterminate"></div>
+                    </div>
+                </li>
+              </ul>
+        </div>
+    </div>
+
+
+
+  <!--  Scripts-->
+  <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.rawgit.com/mattdiamond/Recorderjs/08e7abd9/dist/recorder.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="js/materialize.js"></script>
+    <script src="js/init.js"></script>
+  
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-functions.js"></script>
+  
+      <!-- TODO: Add SDKs for Firebase products that you want to use
+           https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-analytics.js"></script>
+    <script src="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.js"></script>
+  
+      <script>
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+          apiKey: "AIzaSyA8DMR5BpnxWl4BrO1mIucPMwc1kkr0njQ",
+          authDomain: "ai-can-do.firebaseapp.com",
+          databaseURL: "https://ai-can-do.firebaseio.com",
+          projectId: "ai-can-do",
+          storageBucket: "ai-can-do.appspot.com",
+          messagingSenderId: "434542987185",
+          appId: "1:434542987185:web:10ec9ba253fc203215df90",
+          measurementId: "G-R3MD3J1H87"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+  
+        $(document).ready(function () {
+          $('.modal').modal();
+        });
+    </script>
+    
+    <script src="js/login.js"></script>
+    <script src="js/tasks.js"></script>
+    </body>
+  </html>
+  
