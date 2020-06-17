@@ -4,14 +4,91 @@ const functions = firebase.functions();
 //const client = new Wit({accessToken: "PEDIZ6QF3QCF3XLTCABYX4WO4V54DWMM"});
 
 var gStream, recorder, input;
-var AudioContext = window.AudioContext || window.webkitAudioContext;
-var audioContext = new AudioContext;
 
 var recordButton, stopButton;
 
 $(document).ready(() => {
-    recordButton = $("#start-record");
-    stopButton = $("#stop-record");
+    firebase.auth().onAuthStateChanged(user => {
+		if(user){
+            var user = firebase.auth().currentUser;
+            console.log(user.email);
+
+            showAllTasks(user);
+
+            function speechToText(blob){
+                console.log(blob);
+                axios.post('https://cors-anywhere.herokuapp.com/https://api.wit.ai/speech?v=20200609', blob, {
+                    headers:{
+                        "Authorization": "Bearer PEDIZ6QF3QCF3XLTCABYX4WO4V54DWMM",
+                        "Content-Type": "audio/wav"
+                    }
+                })
+                .then(function(data){
+                    console.log(data.data.text);
+                    let msg = data.data.text;
+                    predictMsg(msg, (err, result) => {
+                        db.collection("tasks").add({
+                            details: result.value,
+                            done: false,
+                            email: user.email
+                        }).then(() => {
+                            // reload all tasks
+                            showAllTasks(user);
+                            $("#form").children("input").val("");
+                        })
+                    })
+                })
+                .catch(function(e){
+                    console.log(e);
+                });
+            }
+            
+            
+            function startRecording(){
+                var AudioContext = window.AudioContext || window.webkitAudioContext;
+                var audioContext = new AudioContext;
+                navigator.mediaDevices.getUserMedia({audio: true, video: false})
+                .then((stream) => {
+                    gStream = stream;
+                    input = audioContext.createMediaStreamSource(gStream);
+                    rec = new Recorder(input, {
+                        numChannels: 1
+                    })
+                    rec.record();
+                    console.log("Record start");
+                    recordButton.addClass("disabled");
+                    stopButton.removeClass("disabled");
+                }).catch((err) => {
+                    recordButton.removeClass("disabled");
+                    stopButton.addClass("disabled");
+                })
+            }
+            
+            function stopRecording(){
+                recordButton.removeClass("disabled");
+                stopButton.addClass("disabled");
+                rec.stop();
+                gStream.getAudioTracks()[0].stop();
+                rec.exportWAV(speechToText);
+                // audioContext.close()
+            }
+
+            recordButton = $("#start-record");
+            stopButton = $("#stop-record");
+
+            recordButton.click(() => {startRecording();});
+            stopButton.click(() => {stopRecording();});
+
+		}else{
+			window.location.href = "index.html";
+		}
+	})
+
+	$("form").submit((e) => {
+		e.preventDefault();
+    })
+    
+    
 })
 
 function predictMsg(msg, callback){
@@ -40,76 +117,7 @@ function predictMsg(msg, callback){
     }
 }
 
-function speechToText(blob){
-    console.log(blob);
-    axios.post('https://cors-anywhere.herokuapp.com/https://api.wit.ai/speech?v=20200609', blob, {
-        headers:{
-            "Authorization": "Bearer PEDIZ6QF3QCF3XLTCABYX4WO4V54DWMM",
-            "Content-Type": "audio/wav"
-        }
-    })
-    .then(function(e){
-        console.log(e);
-    })
-    .catch(function(e){
-        console.log(e);
-    });
-}
 
-// function playback(blob){
-//     var url = URL.createObjectURL(blob);
-//     var au = document.createElement("audio");
-
-//     au.control = true;
-//     au.src = url;
-
-
-// }
-
-function startRecording(){
-    navigator.mediaDevices.getUserMedia({audio: true, video: false})
-    .then((stream) => {
-        gStream = stream;
-        input = audioContext.createMediaStreamSource(gStream);
-        rec = new Recorder(input, {
-            numChannels: 1
-        })
-        rec.record();
-        console.log("Record start");
-        recordButton.addClass("disabled");
-        stopButton.removeClass("disabled");
-    }).catch((err) => {
-        recordButton.removeClass("disabled");
-        stopButton.addClass("disabled");
-    })
-}
-
-function stopRecording(){
-    recordButton.removeClass("disabled");
-    stopButton.addClass("disabled");
-    rec.stop();
-    gStream.getAudioTracks()[0].stop();
-    rec.exportWAV(speechToText);
-}
-
-
-$(document).ready(() => {
-    firebase.auth().onAuthStateChanged(user => {
-		if(user){
-            var user = firebase.auth().currentUser;
-            console.log(user.email);
-
-            const refresh = setInterval(showAllTasks(user), 500);
-
-		}else{
-			window.location.href = "index.html";
-		}
-	})
-
-	$("form").submit((e) => {
-		e.preventDefault();
-	})
-})
 
 function showAllTasks(user){
 
