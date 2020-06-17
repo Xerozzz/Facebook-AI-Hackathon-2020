@@ -48,24 +48,12 @@ function speechToText(blob){
             "Content-Type": "audio/wav"
         }
     })
-    .then((data) => {
-        console.log(data);
+    .then(function(e){
+        console.log(e);
     })
-    .catch((err) => {
-        console.log(err);
-    })
-    // let request = new XMLHttpRequest();
-    // request.open("POST", "https://cors-anywhere.herokuapp.com/https://api.wit.ai/speech?v=20200609");
-    // request.setRequestHeader("Authorization", "Bearer PEDIZ6QF3QCF3XLTCABYX4WO4V54DWMM");
-    // request.setRequestHeader("Content-Type", "audio/wav");
-    // // request.setRequestHeader("Origin", "ai-can-do.web.app");
-    // request.send({"binary-data": blob});
-    // request.onload = () => {
-    //     if(request.status){
-    //         let resp = JSON.parse(request.response);
-    //         console.log(resp);
-    //     }
-    // }
+    .catch(function(e){
+        console.log(e);
+    });
 }
 
 // function playback(blob){
