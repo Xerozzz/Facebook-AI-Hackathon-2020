@@ -126,7 +126,10 @@
                 <input type="text" id="task-input" class="autocomplete">
                 <label for="task-input">Give me a task!</label>
                 <input type="submit" style="visibility: hidden;">
+                
             </form>
+            <a id="start-record" onclick="startRecording()" class="waves-effect waves-light btn"><i class="material-icons">mic</i></a>
+            <a id="stop-record" onclick="stopRecording()" class="waves-effect waves-light btn disabled"><i class="material-icons">stop</i></a>
         </div>
        
         
@@ -162,7 +165,8 @@
 
   <!--  Scripts-->
   <!-- jQuery library -->
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.rawgit.com/mattdiamond/Recorderjs/08e7abd9/dist/recorder.js"></script>
     <script src="js/materialize.js"></script>
     <script src="js/init.js"></script>
   
@@ -171,6 +175,7 @@
     <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-functions.js"></script>
   
       <!-- TODO: Add SDKs for Firebase products that you want to use
            https://firebase.google.com/docs/web/setup#available-libraries -->

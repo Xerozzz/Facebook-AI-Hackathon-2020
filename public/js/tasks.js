@@ -1,4 +1,85 @@
 const db = firebase.firestore();
+const functions = firebase.functions();
+//const {Wit, log} = require("node-wit");
+//const client = new Wit({accessToken: "PEDIZ6QF3QCF3XLTCABYX4WO4V54DWMM"});
+
+var gStream, recorder, input;
+var AudioContext = window.AudioContext || window.webkitAudioContext;
+var audioContext = new AudioContext;
+
+var recordButton, stopButton;
+
+$(document).ready(() => {
+    recordButton = $("#start-record");
+    stopButton = $("#stop-record");
+})
+
+function predictMsg(msg, callback){
+    let request = new XMLHttpRequest();
+    request.open("GET", "https://api.wit.ai/message?v=20200609&q=" + msg);
+    request.setRequestHeader("Authorization", "Bearer PEDIZ6QF3QCF3XLTCABYX4WO4V54DWMM");
+    request.send();
+    request.onload = () => {
+        // console.log(request);
+        if(request.status){
+            let resp = JSON.parse(request.response);
+
+            // console.log(resp.entities["wit$message_subject:message_subject"]['0'].value);
+            let subject_arr = resp.entities["wit$message_subject:message_subject"];
+
+            let result = {value: "", command: ""};
+            subject_arr.forEach((entity) => {
+                result.value = entity.value;
+            })
+            // console.log(result);
+            callback(null, result);
+        }else{
+            console.log(request.statusText);
+            callback(request.statusText, null);
+        }
+    }
+}
+
+function speechToText(blob){
+    let request = new XMLHttpRequest();
+    request.open("POST", "https://api.wit.ai/speech?v=20200609");
+    request.setRequestHeader("Authorization", "Bearer PEDIZ6QF3QCF3XLTCABYX4WO4V54DWMM");
+    request.setRequestHeader("Content-Type", "audio/wav");
+    request.send(blob);
+    request.onload = () => {
+        if(request.status){
+            let resp = JSON.parse(request.response);
+            console.log(resp);
+        }
+    }
+}
+
+function startRecording(){
+    navigator.mediaDevices.getUserMedia({audio: true, video: false})
+    .then((stream) => {
+        gStream = stream;
+        input = audioContext.createMediaStreamSource(gStream);
+        rec = new Recorder(input, {
+            numChannels: 1
+        })
+        rec.record();
+        console.log("Record start");
+        recordButton.addClass("disabled");
+        stopButton.removeClass("disabled");
+    }).catch((err) => {
+        recordButton.removeClass("disabled");
+        stopButton.addClass("disabled");
+    })
+}
+
+function stopRecording(){
+    recordButton.removeClass("disabled");
+    stopButton.addClass("disabled");
+    rec.stop();
+    gStream.getAudioTracks()[0].stop();
+    rec.exportWAV(speechToText)
+}
+
 
 $(document).ready(() => {
     firebase.auth().onAuthStateChanged(user => {
@@ -26,7 +107,7 @@ function showAllTasks(user){
     }
 
     function initNewTask(details, completed){
-        console.log(completed);
+        //console.log(completed);
         var taskObj = `<li class="collection-item"><div>
         <label>
             <input type="checkbox" onchange="tasksDone(this)" ${(completed ? "checked" : "")}/>
@@ -41,11 +122,11 @@ function showAllTasks(user){
     db.collection("tasks").where("email", "==", user.email).get().then((querySnapshot) => {
         clearTables()
         querySnapshot.forEach((doc) => {
-            console.log(doc.data());
+            // console.log(doc.data());
             let details = doc.data().details;
             let done = doc.data().done;
 
-            console.log(done);
+            // console.log(done);
 
             initNewTask(details, done);
         })
@@ -73,18 +154,23 @@ function tasksDone(checkBox){
 }
 
 function addNewTask(form){
-    console.log("saubmit");
+    console.log("submit");
     let details = $(form).children("input").val();
     let user = firebase.auth().currentUser;
-    db.collection("tasks").add({
-        details: details,
-        done: false,
-        email: user.email
-    }).then(() => {
-        // reload all tasks
-        showAllTasks(user);
-        $(form).children("input").val("");
-    }).catch((err) => {console.log(err)});
+
+    //let result = await predictMsg(details);
+    predictMsg(details, (err, result) => {
+        db.collection("tasks").add({
+            details: result.value,
+            done: false,
+            email: user.email
+        }).then(() => {
+            // reload all tasks
+            showAllTasks(user);
+            $(form).children("input").val("");
+        })
+    });
+    
 }
 
 
