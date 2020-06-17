@@ -41,18 +41,42 @@ function predictMsg(msg, callback){
 }
 
 function speechToText(blob){
-    let request = new XMLHttpRequest();
-    request.open("POST", "https://api.wit.ai/speech?v=20200609");
-    request.setRequestHeader("Authorization", "Bearer PEDIZ6QF3QCF3XLTCABYX4WO4V54DWMM");
-    request.setRequestHeader("Content-Type", "audio/wav");
-    request.send(blob);
-    request.onload = () => {
-        if(request.status){
-            let resp = JSON.parse(request.response);
-            console.log(resp);
+    console.log(blob);
+    axios.post('https://cors-anywhere.herokuapp.com/https://api.wit.ai/speech?v=20200609', blob, {
+        headers:{
+            "Authorization": "Bearer PEDIZ6QF3QCF3XLTCABYX4WO4V54DWMM",
+            "Content-Type": "audio/wav"
         }
-    }
+    })
+    .then((data) => {
+        console.log(data);
+    })
+    .catch((err) => {
+        console.log(err);
+    })
+    // let request = new XMLHttpRequest();
+    // request.open("POST", "https://cors-anywhere.herokuapp.com/https://api.wit.ai/speech?v=20200609");
+    // request.setRequestHeader("Authorization", "Bearer PEDIZ6QF3QCF3XLTCABYX4WO4V54DWMM");
+    // request.setRequestHeader("Content-Type", "audio/wav");
+    // // request.setRequestHeader("Origin", "ai-can-do.web.app");
+    // request.send({"binary-data": blob});
+    // request.onload = () => {
+    //     if(request.status){
+    //         let resp = JSON.parse(request.response);
+    //         console.log(resp);
+    //     }
+    // }
 }
+
+// function playback(blob){
+//     var url = URL.createObjectURL(blob);
+//     var au = document.createElement("audio");
+
+//     au.control = true;
+//     au.src = url;
+
+
+// }
 
 function startRecording(){
     navigator.mediaDevices.getUserMedia({audio: true, video: false})
@@ -77,7 +101,7 @@ function stopRecording(){
     stopButton.addClass("disabled");
     rec.stop();
     gStream.getAudioTracks()[0].stop();
-    rec.exportWAV(speechToText)
+    rec.exportWAV(speechToText);
 }
 
 
