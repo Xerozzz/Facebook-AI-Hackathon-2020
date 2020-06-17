@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.rawgit.com/mattdiamond/Recorderjs/08e7abd9/dist/recorder.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <button class="test">
+        hi
+    </button>
+
+    <button class="stop">
+        stop
+    </button>
+
+    <script>
+
+        let gStream, recorder, input;
+        let AudioContext = window.AudioContext || window.webkitAudioContext;
+        let audioContext = new AudioContext;
+
+        document.getElementsByClassName('test')[0].addEventListener(
+            'click',
+            function(e){
+                e.preventDefault();
+                console.log('hi');
+
+                navigator.mediaDevices.getUserMedia({audio: true, video: false})
+                .then((stream) => {
+                    gStream = stream;
+                    input = audioContext.createMediaStreamSource(gStream);
+                    rec = new Recorder(input, {
+                        numChannels: 1
+                    })
+                    rec.record();
+                    console.log("Record start");
+                });
+            }
+        );
+
+        document.getElementsByClassName('stop')[0].addEventListener(
+            'click',
+            function(e){
+                e.preventDefault();
+                console.log('Stopping');
+
+                rec.stop();
+                gStream.getAudioTracks()[0].stop();
+                rec.exportWAV(speechToText)
+            }
+        );
+
+        function speechToText(b){
+            console.log(b);
+
+            axios.post('https://cors-anywhere.herokuapp.com/https://api.wit.ai/speech?v=20200609', b, {
+                headers:{
+                    "Authorization": "Bearer PEDIZ6QF3QCF3XLTCABYX4WO4V54DWMM",
+                    "Content-Type": "audio/wav"
+                }
+            })
+            .then(function(e){
+                console.log(e);
+            })
+            .catch(function(e){
+                console.log(e);
+            });
+        }
+    </script>
+</body>
+</html>
